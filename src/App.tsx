@@ -2,20 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import sanitizeHtml from "sanitize-html";
 import { v4 as uuidv4 } from "uuid";
+import usePrevious from "./utils/usePreviousState";
 
 type Node = {
   component: JSX.Element;
   id: string;
-  isFocus: boolean;
 };
 
 const App = () => {
-  const nodesRef: any = useRef([]);
+  const focusedRef: any = useRef(null);
   const [nodes, setNodes] = useState<Node[]>([
     {
       component: (
         <ContentEditable
-          innerRef={(elem: any) => (nodesRef.current[0] = elem)}
+          key={"first-node"}
           className="border border-black p-2"
           onKeyDown={(event) => handleKeyDown("first-node", event)}
           onChange={(event) => handleChange("first-node", event)}
@@ -23,13 +23,17 @@ const App = () => {
         />
       ),
       id: "first-node",
-      isFocus: true,
     },
   ]);
+  const prevCount: any = usePrevious(nodes);
 
   useEffect(() => {
-    //console.log(nodesRef.current[0].focus());
-  });
+    if (prevCount && prevCount.length !== nodes.length) {
+      if (focusedRef && focusedRef.current) {
+        focusedRef.current.focus();
+      }
+    }
+  }, [nodes, prevCount]);
 
   const handleChange = (
     nodeId: string,
@@ -45,7 +49,7 @@ const App = () => {
       newNodes[nodeIndex] = {
         component: (
           <ContentEditable
-            //innerRef={(elem: any) => (nodesRef.current[index] = elem)}
+            key={newNodes[nodeIndex].id}
             className="border border-black p-2"
             onKeyDown={(event) => handleKeyDown(newNodes[nodeIndex].id, event)}
             onChange={(event) => handleChange(newNodes[nodeIndex].id, event)}
@@ -53,7 +57,6 @@ const App = () => {
           />
         ),
         id: newNodes[nodeIndex].id,
-        isFocus: true,
       };
       return newNodes;
     });
@@ -74,7 +77,8 @@ const App = () => {
           isFocus: true,
           component: (
             <ContentEditable
-              //innerRef={(elem: any) => (nodesRef.current[index + 1] = elem)}
+              key={newNodeId}
+              innerRef={focusedRef}
               className="border border-black p-2"
               onKeyDown={(event) => handleKeyDown(newNodeId, event)}
               onChange={(event) => handleChange(newNodeId, event)}
