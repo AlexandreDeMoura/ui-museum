@@ -3,6 +3,7 @@ import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import sanitizeHtml from "sanitize-html";
 import { v4 as uuidv4 } from "uuid";
 import usePrevious from "./utils/usePreviousState";
+import IconMenu from "./assets/icons/icon-menu.svg";
 
 type Node = {
   component: JSX.Element;
@@ -11,12 +12,14 @@ type Node = {
 
 const App = () => {
   const focusedRef: any = useRef(null);
+  const [hoveredNode, setHoveredNode] = useState("");
   const [nodes, setNodes] = useState<Node[]>([
     {
       component: (
         <ContentEditable
+          placeholder={"Hello, World!"}
           key={"first-node"}
-          className="border border-black p-2"
+          className="w-full outline-none"
           onKeyDown={(event) => handleKeyDown("first-node", event)}
           onChange={(event) => handleChange("first-node", event)}
           html={""}
@@ -35,6 +38,10 @@ const App = () => {
     }
   }, [nodes, prevCount]);
 
+  const handleNodeHover = (nodeId: string) => setHoveredNode(nodeId);
+
+  const handleNodeLeave = () => setHoveredNode("");
+
   const handleChange = (
     nodeId: string,
     event: ContentEditableEvent | React.FocusEvent<HTMLDivElement, Element>
@@ -50,7 +57,7 @@ const App = () => {
         component: (
           <ContentEditable
             key={newNodes[nodeIndex].id}
-            className="border border-black p-2"
+            className="w-full"
             onKeyDown={(event) => handleKeyDown(newNodes[nodeIndex].id, event)}
             onChange={(event) => handleChange(newNodes[nodeIndex].id, event)}
             html={sanitizeHtml(event.currentTarget.innerHTML, sanitizeConf)}
@@ -77,9 +84,10 @@ const App = () => {
           isFocus: true,
           component: (
             <ContentEditable
+              placeholder={"Hello, World!"}
               key={newNodeId}
               innerRef={focusedRef}
-              className="border border-black p-2"
+              className="w-full"
               onKeyDown={(event) => handleKeyDown(newNodeId, event)}
               onChange={(event) => handleChange(newNodeId, event)}
               html={""}
@@ -94,11 +102,28 @@ const App = () => {
 
   return (
     <main className="min-h-screen w-screen flex">
-      <div className="bg-notion-sideBar w-60 border-r border-gray-100 z-9999"></div>
+      <div className="bg-notion-sideBar w-60 border-r border-gray-100 z-9999 text-gray-300"></div>
       <div className="flex min-h-screen w-[calc(100%-240px)] flex-col items-center relative">
         <div className="h-11 w-full bg-slate-300 fixed top-0 left-0"></div>
         <div className="mt-11 w-10/12 space-y-2 px-24">
-          {nodes.map((node) => node.component)}
+          {nodes.map((node) => {
+            return (
+              <div
+                className="flex items-center relative"
+                onMouseEnter={() => handleNodeHover(node.id)}
+                onMouseLeave={handleNodeLeave}
+              >
+                {hoveredNode === node.id && (
+                  <img
+                    className="w-6 absolute -left-5"
+                    src={IconMenu}
+                    alt="drag"
+                  />
+                )}
+                {node.component}
+              </div>
+            );
+          })}
         </div>
       </div>
     </main>
