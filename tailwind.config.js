@@ -41,6 +41,9 @@ module.exports = {
           200: '#8ECFAB',
           100: '#CBDCD2',
         },
+        notion: {
+          sideBar: '#fbfbfa'
+        }
       },
       spacing: {
         '-px': '-1px',

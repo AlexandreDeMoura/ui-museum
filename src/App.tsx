@@ -93,9 +93,13 @@ const App = () => {
   };
 
   return (
-    <main className="h-screen flex justify-center pt-10 bg-slate-50">
-      <div className="w-8/12 bg-white space-y-2">
-        {nodes.map((node) => node.component)}
+    <main className="min-h-screen w-screen flex">
+      <div className="bg-notion-sideBar w-60 border-r border-gray-100 z-9999"></div>
+      <div className="flex min-h-screen w-[calc(100%-240px)] flex-col items-center relative">
+        <div className="h-11 w-full bg-slate-300 fixed top-0 left-0"></div>
+        <div className="mt-11 w-10/12 space-y-2 px-24">
+          {nodes.map((node) => node.component)}
+        </div>
       </div>
     </main>
   );
