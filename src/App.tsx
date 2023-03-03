@@ -17,7 +17,7 @@ const App = () => {
     {
       component: (
         <ContentEditable
-          placeholder={"Hello, World!"}
+          placeholder={"Appuyez sur / pour afficher les commandes..."}
           key={"first-node"}
           className="w-full outline-none"
           onKeyDown={(event) => handleKeyDown("first-node", event)}
@@ -57,7 +57,7 @@ const App = () => {
         component: (
           <ContentEditable
             key={newNodes[nodeIndex].id}
-            className="w-full"
+            className="w-full outline-none"
             onKeyDown={(event) => handleKeyDown(newNodes[nodeIndex].id, event)}
             onChange={(event) => handleChange(newNodes[nodeIndex].id, event)}
             html={sanitizeHtml(event.currentTarget.innerHTML, sanitizeConf)}
@@ -84,10 +84,10 @@ const App = () => {
           isFocus: true,
           component: (
             <ContentEditable
-              placeholder={"Hello, World!"}
+              placeholder={"Appuyez sur / pour afficher les commandes..."}
               key={newNodeId}
               innerRef={focusedRef}
-              className="w-full"
+              className="w-full outline-none"
               onKeyDown={(event) => handleKeyDown(newNodeId, event)}
               onChange={(event) => handleChange(newNodeId, event)}
               html={""}
@@ -105,7 +105,7 @@ const App = () => {
       <div className="bg-notion-sideBar w-60 border-r border-gray-100 z-9999 text-gray-300"></div>
       <div className="flex min-h-screen w-[calc(100%-240px)] flex-col items-center relative">
         <div className="h-11 w-full bg-slate-300 fixed top-0 left-0"></div>
-        <div className="mt-11 w-10/12 space-y-2 px-24">
+        <div className="mt-19 w-10/12 space-y-2 px-24">
           {nodes.map((node) => {
             return (
               <div
@@ -115,7 +115,7 @@ const App = () => {
               >
                 {hoveredNode === node.id && (
                   <img
-                    className="w-6 absolute -left-5"
+                    className="w-6 absolute -left-6"
                     src={IconMenu}
                     alt="drag"
                   />

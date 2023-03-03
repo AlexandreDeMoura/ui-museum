@@ -5,6 +5,6 @@
 [contenteditable=true]:empty:before {
     content: attr(placeholder);
     display: block;
-    color: #aaa;
+    color: #8A8D8F;
     cursor: text;
   }
