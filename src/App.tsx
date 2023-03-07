@@ -4,6 +4,9 @@ import sanitizeHtml from "sanitize-html";
 import { v4 as uuidv4 } from "uuid";
 import usePrevious from "./utils/usePreviousState";
 import IconMenu from "./assets/icons/icon-menu.svg";
+import IconAdd from "./assets/icons/icon-add.svg";
+import { AddBlockMenu } from "./components/AddBlockMenu";
+import { Popover } from "@headlessui/react";
 
 type Node = {
   component: JSX.Element;
@@ -40,7 +43,7 @@ const App = () => {
 
   const handleNodeHover = (nodeId: string) => setHoveredNode(nodeId);
 
-  const handleNodeLeave = () => setHoveredNode("");
+  //const handleNodeLeave = () => setHoveredNode("");
 
   const handleChange = (
     nodeId: string,
@@ -111,15 +114,27 @@ const App = () => {
               <div
                 className="flex items-center relative"
                 onMouseEnter={() => handleNodeHover(node.id)}
-                onMouseLeave={handleNodeLeave}
+                //onMouseLeave={handleNodeLeave}
               >
-                {hoveredNode === node.id && (
-                  <img
-                    className="w-6 absolute -left-6"
-                    src={IconMenu}
-                    alt="drag"
-                  />
-                )}
+                <Popover>
+                  {hoveredNode === node.id && (
+                    <div className="flex flex-row-reverse absolute -left-12 top-0">
+                      <img
+                        className="w-6 cursor-not-allowed"
+                        src={IconMenu}
+                        alt="drag"
+                      />
+                      <Popover.Button as="div">
+                        <img
+                          className="w-6 cursor-pointer"
+                          src={IconAdd}
+                          alt="add block"
+                        />
+                      </Popover.Button>
+                    </div>
+                  )}
+                  <AddBlockMenu />
+                </Popover>
                 {node.component}
               </div>
             );
